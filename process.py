@@ -236,8 +236,9 @@ def reservation(params: dict, mobile: str):
     params.pop('userId')
     responses = requests.post("https://app.moutai519.com.cn/xhr/front/mall/reservation/add", json=params,
                               headers=headers)
-    if responses.text.__contains__('bad token'):
+    if responses.text.__contains__('token'):
         send_email(f'[{mobile}],登录token失效，需要重新登录')
+        get_vcode(mobile)
         raise RuntimeError
     logging.info(
         f'预约 : mobile:{mobile} :  response code : {responses.status_code}, response body : {responses.text}')
